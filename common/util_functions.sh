@@ -14,7 +14,7 @@ fi
 
 # Checking Magisk Busybox
 if [ -z "$INSTFN" ] && [ "$BOOTSTAGE" != "post" -a "$BOOTSTAGE" != "late" ]; then
-	BBPATH=$ADBPATH/magisk/busybox
+	BBPATH=$ADBPATH/ksu/bin/busybox
 	if [ -f "$BBPATH" ]; then
 		for ITEM in $($BBPATH --list | tail -n +3); do
 			alias $ITEM="$BBPATH $ITEM"
@@ -161,14 +161,12 @@ else
 	"
 fi
 
-TMPFSMOUNT=$(magisk --path)
-MIRRORPATH=$TMPFSMOUNT/.magisk/mirror
 SYSTEMFILE=$MODPATH/system.prop
 RUNFILE=$MHPCPATH/script_check
 UPDATECHECK=""
 # Make sure that the terminal app used actually can see resetprop
 if [ "$BOOTSTAGE" == "props" ]; then
-	alias resetprop="$ADBPATH/magisk/magisk resetprop"
+	alias resetprop="$ADBPATH/ksu/bin resetprop"
 fi
 
 # Fingerprint variables
@@ -490,9 +488,6 @@ format_file() {
 # Reboot the device
 force_reboot() {
 	RBREASON=""
-	if [ "$(get_file_value "$TMPFSMOUNT/.magisk/config" "RECOVERYMODE=")" == "true" ]; then
-		RBREASON="recovery"
-	fi
 	echo ""
 	echo -e "${C}Rebooting...${N}"
 	log_handler "Rebooting."
